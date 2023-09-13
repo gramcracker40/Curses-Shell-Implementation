@@ -41,28 +41,19 @@ def curses_main(w):
     cmd = ""
     
     while True:    
-        try:
-            char = w.getch()
-            cmd += chr(char)
-            #w.addstr(f"Char: {char}  Type: {type(char)}")
-
-            if char in nav_mapper:
-                action = nav_mapper[char](cmd, w)
-            else:
-                w.addch(char)
-            
-
-            w.refresh()
         
-        except KeyboardInterrupt:
-            w.addstr("Exiting shell...")
-            sleep(2)
-            break
-            
-            
-    w.refresh()
+        char = w.getch()
+        cmd += chr(char)
+        #w.addstr(f"Char: {char}  Type: {type(char)}")
 
-    print(cmd)
+        if char in nav_mapper:
+            action = nav_mapper[char](cmd, w)
+        else:
+            w.addch(char)
+        
+
+        w.refresh()
+        
 
 # starts the curses window
 if __name__ == "__main__":

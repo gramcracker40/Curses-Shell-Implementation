@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-#from cmd_pkg.__init__ import ls, pwd, cat
+# from cmd_pkg.__init__ import ls, pwd, cat
 
-# from Grep import grep
-# from Exit import exit 
+from cmd_pkg import grep
+
+# from Exit import exit
 # from History import history
 
 """
@@ -14,24 +15,28 @@ Methods:
     exists (string) : checks if a command exists (dictionary points to the function)
     help (string) : returns the doc string for a function 
 """
+
+
 class CommandsHelper(object):
     def __init__(self):
         self.invoke = {}
         self.help = {}
 
-        for key, value in globals().items():
-            if key != 'Commands' and callable(value):
-                self.invoke[key] = value
-                self.help[key] = value.__doc__
-
-    def exists(self,cmd):
-        return cmd in self.invoke
-    
-    
-    # def help(self,cmd):
-    #     return self.commands.invoke[cmd].__doc__
-    
+        self.invoke["grep"] = grep
         
 
-if __name__=='__main__':
+    def exists(self, cmd):
+        return cmd in self.invoke
+
+    def runner(self, cmd, *args, **kwargs):
+        return self.invoke[cmd](*args, **kwargs)
+
+    def __repr__(self):
+        return f"Commands: {self.invoke}"
+
+    # def help(self,cmd):
+    #     return self.commands.invoke[cmd].__doc__
+
+
+if __name__ == "__main__":
     pass
