@@ -12,8 +12,7 @@ from time import sleep
 ##################################################################################
 
 from getch import Getch
-from cmd_pkg_use.main import cmd
-from loop_helpers import nav_mapper
+from loop_helpers import nav_mapper, prompt
 
 ##################################################################################
 ##################################################################################
@@ -35,7 +34,7 @@ def curses_main(w):
     w.addstr("---------------------------\n")
     w.refresh()
 
-    w.addstr("\n$ ")
+    w.addstr(f"\n{prompt}")
     w.refresh()
 
     cmd = ""
@@ -43,17 +42,18 @@ def curses_main(w):
     while True:    
         
         char = w.getch()
-        cmd += chr(char)
+        
         #w.addstr(f"Char: {char}  Type: {type(char)}")
 
         if char in nav_mapper:
             action = nav_mapper[char](cmd, w)
 
             if char == 8:
-                cmd = "$ " + action
-                w.addstr(cmd)
+                cmd = action  # set cmd to the freshly returned str
+                print(f"cmd new value: {cmd}")
         else:
             w.addch(char)
+            cmd += chr(char)
         
 
         w.refresh()

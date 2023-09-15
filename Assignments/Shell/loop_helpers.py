@@ -22,12 +22,17 @@ def backspace_key(cmd:str, w):
     curs = w.getyx()
     
     # clear the line
+    
+    
+    # take away the correct index
+    temp = cmd[:curs[1] - 3] + cmd[curs[1] - 2:] if curs[1] > 1 else cmd
+    
     w.move(curs[0], 0)
     w.clrtobot()
     w.refresh()
-    
-    # take away the correct index
-    temp = cmd[:curs[1] + 2] + cmd[curs[1] + 3:] if curs[1] > 1 else cmd
+    w.addstr(prompt + temp)
+    w.move(curs[0], curs[1] - 1)
+    print(f"Backspace result --> {temp}")
     return temp
 
 
