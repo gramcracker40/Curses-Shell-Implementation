@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # from cmd_pkg.__init__ import ls, pwd, cat
 
-from cmd_pkg import grep
+from cmd_pkg import grep, cat, exit, ls, pwd 
 
 # from Exit import exit
 # from History import history
@@ -23,6 +23,10 @@ class CommandsHelper(object):
         self.help = {}
 
         self.invoke["grep"] = grep
+        self.invoke["cat"] = cat
+        self.invoke["ls"] = ls
+        self.invoke["exit"] = exit
+        self.invoke["pwd"] = pwd
         
 
     def exists(self, cmd):

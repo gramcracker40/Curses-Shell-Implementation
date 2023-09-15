@@ -13,6 +13,24 @@ prompt = "$ "                               # set default prompt
 prev_cmds = []
 
 
+def backspace_key(cmd:str, w):
+    '''
+    delete a character from terminal
+    return new string for the command with the
+    appropriate index being removed. 
+    '''
+    curs = w.getyx()
+    
+    # clear the line
+    w.move(curs[0], 0)
+    w.clrtobot()
+    w.refresh()
+    
+    # take away the correct index
+    temp = cmd[:curs[1] + 2] + cmd[curs[1] + 3:] if curs[1] > 1 else cmd
+    return temp
+
+
 def right_arrow(cmd:str, w):
     '''
     implements the right arrow key
@@ -47,7 +65,6 @@ def down_arrow(cmd:str, w):
     '''
     
 
-
 def enter_key(cmd:str, w):
     '''
     executes the command
@@ -70,14 +87,6 @@ def enter_key(cmd:str, w):
 
     
     pass
-
-
-def backspace_key(cmd:str, w):
-    '''
-    delete a character from terminal
-    '''
-    new = cmd[:-1]
-    return new
 
 
 

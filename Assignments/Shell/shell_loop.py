@@ -13,7 +13,7 @@ from time import sleep
 
 from getch import Getch
 from cmd_pkg_use.main import cmd
-from loop_helpers import print_cmd, nav_mapper
+from loop_helpers import nav_mapper
 
 ##################################################################################
 ##################################################################################
@@ -48,6 +48,10 @@ def curses_main(w):
 
         if char in nav_mapper:
             action = nav_mapper[char](cmd, w)
+
+            if char == 8:
+                cmd = "$ " + action
+                w.addstr(cmd)
         else:
             w.addch(char)
         

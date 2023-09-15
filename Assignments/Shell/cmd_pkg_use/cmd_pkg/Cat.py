@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from subprocess import call
 
-def cat(**kwargs):
+def cat(*args, **kwargs):
     """   
     NAME
         cat - concatenate files and print on the standard output
@@ -42,13 +42,14 @@ def cat(**kwargs):
 
         cat    Copy standard input to standard output.
     """
-    if 'params' in kwargs:
-        params = kwargs['params']
-    if 'flags' in kwargs:
-        flags = kwargs['flags']
-    command = ["cat"]
+    pass
+#     if 'params' in kwargs:
+#         params = kwargs['params']
+#     if 'flags' in kwargs:
+#         flags = kwargs['flags']
+#     command = ["cat"]
 
-    for f in params:
-        command.append(f)
+#     for f in params:
+#         command.append(f)
 
-    call(command)
+#     call(command
