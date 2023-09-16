@@ -28,11 +28,11 @@ class CommandsHelper(object):
     def exists(self, cmd):
         return cmd in self.invoke
 
-    def runner(self, cmd, *args, **kwargs):
+    def runner(self, cmd, **kwargs):
         '''
         runs a command once a shell user presses 'enter' or 'return'
         '''
-        return self.invoke[cmd](*args, **kwargs)
+        return self.invoke[cmd](**kwargs)
 
     def __repr__(self):
         '''

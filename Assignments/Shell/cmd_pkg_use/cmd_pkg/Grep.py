@@ -1,6 +1,6 @@
 
 
-def grep(*args, **kwargs):
+def grep(**kwargs):
     '''
     
     '''

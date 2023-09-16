@@ -22,12 +22,12 @@ def backspace_key(cmd: str, w):
     '''
     curs = w.getyx()
 
-    temp = cmd[:curs[1] - 3] + cmd[curs[1] - 2:] if curs[1] > 1 else cmd
+    temp = cmd[:curs[1] - 3] + cmd[curs[1] - 2:] if curs[1] > 2 else cmd
 
-    clear_line(w)
-
-    w.addstr(prompt + temp)
-    w.move(curs[0], curs[1] - 1)
+    if temp != cmd:
+        clear_line(w)
+        w.addstr(prompt + temp)
+        w.move(curs[0], curs[1] - 1)
 
     return temp
 
@@ -96,15 +96,15 @@ def enter_key(cmd: str, w):
     '''
     executes the command
     '''
-    # clear_line(w)
-    curs = w.getyx()
-    w.move(curs[0] + 1, 0)
     time.sleep(1)
-
     prev_cmds.append(cmd)
-    result = execute(cmd)
+    result = execute(cmd, w)
 
-    return result
+    # result contains the result of the previous command
+
+    new_cmd = ""
+
+    return new_cmd
 
 
 nav_mapper = {

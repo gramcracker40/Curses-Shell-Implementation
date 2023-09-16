@@ -6,4 +6,9 @@ def ls(**kwargs):
     return the entire current working directory
     '''
     curr_dir = os.listdir(os.getcwd())
-    return curr_dir
+
+    printable = ""
+    for dirr in curr_dir:
+        printable = printable + dirr + "   "
+
+    return printable

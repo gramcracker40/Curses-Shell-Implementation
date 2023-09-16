@@ -25,6 +25,7 @@ def curses_main(w):
     '''
     Main curses window that will facilitate the shell's infinite loop
     '''
+    w.scrollok(True)
     w.addstr("---------------------------\n")
     w.addstr("| Shell Implementation    |\n")
     w.addstr("| type 'help' for details |\n")
@@ -42,7 +43,7 @@ def curses_main(w):
         if char in nav_mapper:
             action = nav_mapper[char](cmd, w)
 
-            if char == 8:
+            if char == 8 or char == 10:
                 cmd = action
 
         else:
