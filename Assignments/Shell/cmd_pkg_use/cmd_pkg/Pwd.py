@@ -1,6 +1,12 @@
 #!/usr/bin/env python
-from subprocess import call
+import os
 
 def pwd(**kwargs):
-    print("\n")
-    call(["pwd"])
+    '''
+    Print Working Directory
+
+    gives the current path the user is currently working
+    within in that shell instance. 
+    '''
+    temp = os.getcwd()
+    return temp

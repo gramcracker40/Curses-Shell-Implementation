@@ -3,21 +3,17 @@
 
 from cmd_pkg import grep, cat, exit, ls, pwd 
 
-# from Exit import exit
-# from History import history
-
-"""
-This function iterates over globals.items() and if one of the values is "callable"
-meaning it is a function, then I add it to a dictionary called 'invoke'. I also
-add the functions '__doc__' string to a help dictionary.
-
-Methods:
-    exists (string) : checks if a command exists (dictionary points to the function)
-    help (string) : returns the doc string for a function 
-"""
-
-
 class CommandsHelper(object):
+    """
+
+        A helper class that abstracts the general usage of the various commands
+
+        Methods:
+            __init__(self)  : initializes the helper class
+            __repr__(string): returns a doc string for (help)
+            exists (string) : checks if a command existse
+            runner (cmd)    : returns a pointer to the correct function
+    """
     def __init__(self):
         self.invoke = {}
         self.help = {}
@@ -33,13 +29,34 @@ class CommandsHelper(object):
         return cmd in self.invoke
 
     def runner(self, cmd, *args, **kwargs):
+        '''
+        runs a command once a shell user presses 'enter' or 'return'
+        '''
         return self.invoke[cmd](*args, **kwargs)
 
     def __repr__(self):
-        return f"Commands: {self.invoke}"
+        '''
+        Help section of the shell. Shows the list of commands and
+        helps explain the shell a little bit. 
+        '''
+        return f"""
+            \n["grep"] = grep(*args, **kwargs) | 
+            \n\t{grep.__doc__}
+            \n["cat"] = cat(*args, **kwargs)   |
+            \n\t{cat.__doc__}
+            \n["ls"] = ls(*args, **kwargs)     |
+            \n\t{ls.__doc__}
+            \n["exit"] = exit(*args, **kwargs) |
+            \n\t{exit.__doc__}
+            \n["pwd"] = pwd(*args, **kwargs)   |
+            \n\t{pwd.__doc__}
+        """
 
     # def help(self,cmd):
     #     return self.commands.invoke[cmd].__doc__
+
+
+
 
 
 if __name__ == "__main__":
