@@ -1,6 +1,16 @@
 #!/usr/bin/env python
-from subprocess import call
+import os
 
 def ls(**kwargs):
-    print("\n")
-    call(["ls"])
+    '''
+    print out the entire current working directory
+    '''
+
+    curr_dir = os.listdir(os.getcwd())
+    print(os.getcwd())
+    print(curr_dir)
+
+ls()
+
+
+print("Helllllooooo")

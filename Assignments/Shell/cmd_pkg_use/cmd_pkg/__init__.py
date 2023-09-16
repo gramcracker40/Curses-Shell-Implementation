@@ -1,6 +1,5 @@
 import os, sys
 
-print(os.getcwd())
 sys.path.append(os.path.join(os.getcwd(),'cmd_pkg_use'))
 
 

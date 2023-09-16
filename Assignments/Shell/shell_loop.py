@@ -35,6 +35,7 @@ def curses_main(w):
     w.addstr("---------------------------\n")
     w.refresh()
 
+    w.addstr(f"\n{os.getcwd()}")
     w.addstr("\n$ ")
     w.refresh()
 
