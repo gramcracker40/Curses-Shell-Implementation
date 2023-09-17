@@ -12,7 +12,9 @@ from Execute import execute
 from window_helper import clear_line
 
 prompt = "$ "               # set default prompt #TODO change to .env file
-prev_cmds = []
+prev_cmds = []              # in memory list of all previous commands
+arrow_counter = 0           # up and down arrow index position
+
 
 def backspace_key(cmd: str, w):
     '''
@@ -61,28 +63,39 @@ def left_arrow(cmd: str, w):
 # up and down arrows implement switching between previous commands
 ##################################################################
 
-arrow_counter = 0
-
 def up_arrow(cmd: str, w):
     '''
     implements the up arrow key
     '''
-    temp = arrow_counter + 1 if arrow_counter + 1 <= len(prev_cmds) else None
+    global arrow_counter
+    arrow_counter += 1 if arrow_counter + 1 < len(prev_cmds) else 0
     clear_line(w)
-    w.addstr(prev_cmds[temp])
+    
+    if arrow_counter == 0:
+        prev_cmds.insert(0, cmd)
 
-    return cmd
+    if arrow_counter != arrow_counter:
+        arrow_counter = arrow_counter
+
+    new_cmd = prev_cmds[arrow_counter]
+    w.addstr(prompt + new_cmd)
+
+    return new_cmd
 
 
 def down_arrow(cmd: str, w):
     '''
     implements the down arrow key
     '''
-    temp = arrow_counter - 1 if arrow_counter - 1 >= 0 else None
+    global arrow_counter
+    arrow_counter -= 1 if arrow_counter - 1 >= 0 else 0
     clear_line(w)
-    w.addstr(prev_cmds[temp])
+    
+    new_cmd = prev_cmds[arrow_counter]
 
-    return cmd
+    w.addstr(prompt + new_cmd)
+
+    return new_cmd
 
     
 
@@ -99,6 +112,7 @@ def enter_key(cmd: str, w):
     time.sleep(1)
     prev_cmds.append(cmd)
     result = execute(cmd, w)
+    w.addstr(prompt)
 
     # result contains the result of the previous command
 
@@ -108,8 +122,8 @@ def enter_key(cmd: str, w):
 
 
 nav_mapper = {
-    258: down_arrow,
     259: up_arrow,
+    258: down_arrow,
     260: left_arrow,
     261: right_arrow,
     10: enter_key,

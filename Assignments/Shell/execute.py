@@ -1,7 +1,7 @@
 import re
 from errors import CommandDoesNotExist, FlagDoesNotExist, InvalidArgument, display_error
 from cmd_pkg_use.cmd_pkg import CommandsHelper
-from window_helper import clear_line, print_long_string
+from window_helper import clear_line, print_long_string, print_list
 
 
 ex_cmds = [
@@ -38,6 +38,12 @@ capture_redirect_pattern = r'([<>])\s+(\S+)'
 strip_redirect_pattern = r'\s+[<>]\s+\S+'
 
 
+##################################################################################
+##################################################################################
+#   execute() -->  HELPERS
+##################################################################################
+##################################################################################
+
 def capture_redirects(cmd):
     # capture input/output redirects and the start/end index of where
     # they were found in the command, we then add this info to cmd_obj
@@ -72,39 +78,43 @@ def parse_cmd(cmd_temp):
     
     return cmd_obj
 
+##################################################################################
+##################################################################################
+
+
 
 def execute(cmd: str, w):
     """
-    : Musts for a command to work.
+    execute(cmd: str, w:curses_window) --> given a command string, run the command and
+                form the appropriate response. 
+
+    : Below explains the syntax for a command to work.
     : Name : Must be a valid command name listed in help
     : Params : Must be a valid parameter listed in the help section of the specified command
                 ex: grep keyword file.txt --- valid   --> file.txt must exist
                 ex: grfsdc                --- not valid
     : Flags : -f -t -tl etc. does not matter on flag placement just ensure the order of your arguments
-                            are placed properly
+                            are placed properly. Get passed to the function for proper output
                 ex: grep -l keyword -f file.txt
                 proper: grep -l -f keyword file
                 again, does not matter.
 
     : Pipe  : "|" as much as you want. The below function can parse it
-                ex. grep -l error app.log | cat -n > error_summary.txt 
+                NOTE: if you do a pipe, the previous cmd's output becomes the piped commands input.
+                ex. grep -l error app.log | cat -n > error_summary.txt \
+            
 
     : Redirects : input: '< file.txt' or  output:'> file.txt'
                     input  --> user can specify files they want sent to the function
                     output --> user can specify where they want the result of the cmd to be sent
-
-
-    parses command/s and formulates correct output
-
-    allows for unlimited input/output redirects throughout your pipes, 1 each per command
-
-    allows for unlimited pipes and valid flags for each command listed in help()
-
+                NOTE: can only do one input and one output redirect per command
+    ex command: grep keyword input.txt > occurences.txt | cat -n > showcase.txt
 
     errors:
         CommandDoesNotExist:
         FlagDoesNotExist:
         InvalidArgument:
+        FileNotFoundError:   
     """
     try:
         # main working object
@@ -125,7 +135,8 @@ def execute(cmd: str, w):
                      
         print(f"cmd_obj: after parsing --> ({cmd_obj})")
 
-        # performs logic on the actual command name and parameters passed if any. 
+        
+        # loop below performs logic on the actual command name and parameters passed if any. 
         # sets piped value if there are any
         # handles input/output redirects found in the command
         prev_cmd_result = None
@@ -151,13 +162,11 @@ def execute(cmd: str, w):
             
             ### RUNNING CMD
             if commands_helper.exists(name):
-                cmd_result = commands_helper.runner(name, options=cmd_obj[cmd_name])
+                cmd_result = commands_helper.runner(name, w, options=cmd_obj[cmd_name])
 
-                ### STORE RESULTS
+                ### STORE RESULTS FROM CMD
                 cmd_obj[cmd_name]['result'] = cmd_result
                 prev_cmd_result = cmd_result
-
-            
 
             ### OUTPUT REDIRECTS
             if cmd_obj[cmd_name]["redirects"]:
@@ -175,29 +184,21 @@ def execute(cmd: str, w):
                 furthest_redirect = redirect["end"] if redirect["end"] > furthest_redirect else furthest_redirect
 
             print_output = True
-            if furthest_redirect - len(cmd) < 2 and furthest_redirect != 0:
-                print_output = False
+            if furthest_redirect - len(cmd) < 2 and furthest_redirect != 0: # redirect happened at end of string
+                print_output = False                                        # do not print it
+            
 
-            print(f"print_output: {print_output} prev_cmd_result: {prev_cmd_result}")
-            if print_output and prev_cmd_result:
+            # determine how to print the returned value
+            if print_output and type(prev_cmd_result) == str:
                 print_long_string(w, prev_cmd_result)
+            elif print_output and type(prev_cmd_result) == list:
+                print_list(w, prev_cmd_result)
             else:
-                print_long_string(w, f"Error: command {name} was not passed with the correct arguments")
+                print_long_string(w, f"No output detected\n")
             
         
         return prev_cmd_result
-
-
-
-
-        # current structure of cmd_obj - Pure example
-        # {'grep keyword file_name': {"flags": [-f, -l], "result": "string returned by the command run."
-        #   "redirects": [{'symbol': symbol, 'file_name': file_name, 'start': start_index, 'end': end_index}
-        #   "piped_value": last_cmd_result or None]}
-        #               
-        # }
         
-
     except CommandDoesNotExist as err:
         display_error(w, err)
 
@@ -218,3 +219,13 @@ def execute(cmd: str, w):
 
 
 # print(commands)
+
+
+
+
+# current structure of cmd_obj - Pure example
+# {'grep keyword file_name': {"flags": [-f, -l], "result": "string returned by the command run."
+#   "redirects": [{'symbol': symbol, 'file_name': file_name, 'start': start_index, 'end': end_index}
+#   "piped_value": last_cmd_result or None]}
+#               
+# }

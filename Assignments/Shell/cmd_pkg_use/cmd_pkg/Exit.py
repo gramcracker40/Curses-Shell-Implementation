@@ -1,4 +1,4 @@
 import sys
 
-def exit(**kwargs):
+def exit(*args, **kwargs):
     sys.exit()

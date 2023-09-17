@@ -17,22 +17,31 @@ class CommandsHelper(object):
     def __init__(self):
         self.invoke = {}
         self.help = {}
+        self.color_options = {}
 
         self.invoke["grep"] = grep
         self.invoke["cat"] = cat
         self.invoke["ls"] = ls
         self.invoke["exit"] = exit
         self.invoke["pwd"] = pwd
+
+
+        self.color_options["grep"] = {}
+        self.color_options["cat"] = {}
+        self.color_options["ls"] = {"color": "GREEN", "delimeter": "."}
+        self.color_options["exit"] = {} 
+        self.color_options["pwd"] = {}
+
         
 
     def exists(self, cmd):
         return cmd in self.invoke
 
-    def runner(self, cmd, **kwargs):
+    def runner(self, cmd, w, **kwargs):
         '''
         runs a command once a shell user presses 'enter' or 'return'
         '''
-        return self.invoke[cmd](**kwargs)
+        return self.invoke[cmd](w, **kwargs)
 
     def __repr__(self):
         '''

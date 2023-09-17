@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 
-def pwd(**kwargs):
+def pwd(*args, **kwargs):
     '''
     Print Working Directory
 
