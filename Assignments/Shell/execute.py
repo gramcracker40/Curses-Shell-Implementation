@@ -1,7 +1,7 @@
 import re
 from errors import CommandDoesNotExist, FlagDoesNotExist, InvalidArgument, display_error
 from cmd_pkg_use.cmd_pkg import CommandsHelper
-from window_helper import clear_line, print_long_string, print_list
+from window_helpers import clear_line, print_long_string, print_list
 
 
 ex_cmds = [
@@ -52,11 +52,10 @@ def capture_redirects(cmd):
     cmd_obj = []
     for match in redirects:
         symbol, file_name = match.groups()
-        start_index = match.start()
-        end_index = match.end()
+        
         cmd_obj.append(
             {'symbol': symbol, 'file_name': file_name,
-                'start': start_index, 'end': end_index}
+                'start': match.start(), 'end': match.end()}
         )
 
     return cmd_obj
@@ -110,6 +109,8 @@ def execute(cmd: str, w):
                 NOTE: can only do one input and one output redirect per command
     ex command: grep keyword input.txt > occurences.txt | cat -n > showcase.txt
 
+    returns: The result of the inputted command
+
     errors:
         CommandDoesNotExist:
         FlagDoesNotExist:
@@ -140,6 +141,7 @@ def execute(cmd: str, w):
         # sets piped value if there are any
         # handles input/output redirects found in the command
         prev_cmd_result = None
+        print_output = True
         for count, cmd_name in enumerate(cmd_obj):
             # with all redirects/flags parsed, all that remains is the string holding the name and args
             parsed = cmd_name.split()
@@ -169,7 +171,7 @@ def execute(cmd: str, w):
                 prev_cmd_result = cmd_result
 
             ### OUTPUT REDIRECTS
-            if cmd_obj[cmd_name]["redirects"]:
+            if len(cmd_obj[cmd_name]["redirects"]) > 0:
                 for redirect in cmd_obj[cmd_name]["redirects"]:
                     if redirect["symbol"] == ">":                           # output file redirect passed to command
                         output_data = open(redirect["file_name"], "w")      # try to open the file
@@ -183,19 +185,20 @@ def execute(cmd: str, w):
             for redirect in cmd_obj[cmd_name]["redirects"]:
                 furthest_redirect = redirect["end"] if redirect["end"] > furthest_redirect else furthest_redirect
 
-            print_output = True
             if furthest_redirect - len(cmd) < 2 and furthest_redirect != 0: # redirect happened at end of string
                 print_output = False                                        # do not print it
             
 
-            # determine how to print the returned value
-            if print_output and type(prev_cmd_result) == str:
-                print_long_string(w, prev_cmd_result)
-            elif print_output and type(prev_cmd_result) == list:
-                print_list(w, prev_cmd_result)
-            else:
-                print_long_string(w, f"No output detected\n")
-            
+        # determine how to print the returned value
+        # color options are defined in commandsHelper
+        if print_output and type(prev_cmd_result) == str:
+            print_long_string(w, prev_cmd_result)
+        elif print_output and type(prev_cmd_result) == list:
+            print_list(w, prev_cmd_result, 
+                        color_options=commands_helper.color_options[name])
+        else:
+            print_long_string(w, f"No output detected\n")
+        
         
         return prev_cmd_result
         
