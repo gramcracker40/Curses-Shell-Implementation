@@ -1,19 +1,32 @@
 #
 # Functional helper units of the main shell loop
 #
-#   mapper -> dictionary mapping all key strokes to the appropriate terminal action
-#
+#   mapper -> dictionary mapping all key strokes to the 
+#               appropriate terminal action
+#   
 
 import sys
 import os
 import time
 import curses
+from socket import gethostname
 from Execute import execute
-from window_helper import clear_line
+from window_helpers import clear_line, curses_colors
 
 prompt = "$ "               # set default prompt #TODO change to .env file
 prev_cmds = []              # in memory list of all previous commands
 arrow_counter = 0           # up and down arrow index position
+
+
+def set_the_shell(w):
+    # sets the shell
+    username = os.getenv('USERNAME') or os.getenv('USER')
+    hostname = gethostname()
+
+    w.addstr(f"{username}@{hostname} ~ ", curses.color_pair(curses_colors["RED"]))
+    w.addstr(f"{os.getcwd()}\n", curses.color_pair(curses_colors["CYAN"]))
+    w.addstr(prompt)
+    w.refresh()
 
 
 def backspace_key(cmd: str, w):
@@ -45,19 +58,19 @@ def right_arrow(cmd: str, w):
     curs = w.getyx()
     max = w.getmaxyx()
 
-    if curs[1] + 1 < max[1]:
-        w.move(curs[0], curs[1] + 1)
-
-
+    w.move(curs[0], curs[1] + 1) if curs[1] + 1 < max[1] else None
+    
+    return cmd
+        
 def left_arrow(cmd: str, w):
     '''
     implements the left arrow key
     '''
     curs = w.getyx()
 
-    if curs[1] - 1 >= 0:
-        w.move(curs[0], curs[1] - 1)
+    w.move(curs[0], curs[1] - 1) if curs[1] - 1 >= 0 else None
 
+    return cmd
 
 ##################################################################
 # up and down arrows implement switching between previous commands
@@ -112,13 +125,10 @@ def enter_key(cmd: str, w):
     time.sleep(1)
     prev_cmds.append(cmd)
     result = execute(cmd, w)
-    w.addstr(prompt)
+    
+    set_the_shell(w)
 
-    # result contains the result of the previous command
-
-    new_cmd = ""
-
-    return new_cmd
+    return "" # reset the command in shell
 
 
 nav_mapper = {

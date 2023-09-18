@@ -22,7 +22,28 @@ def clear_line(w):
     w.refresh()
 
 
-def print_long_string(w, string: str, color_options=[{}]):
+def delimeter_coloring(w, chopped, color_options):
+    '''
+    handles the logic behind color_options in 
+    print_long_string and print_list 
+    adds the strings to the window
+    '''
+    color_check = bool(color_options[0].get("delimeter")) \
+        and color_options.get("color") is not None
+
+    for line in chopped:
+        colored = False
+        if color_check:
+            for each in color_options:
+                if each["delimeter"] in line:
+                    w.addstr(f"{line}\n", 
+                        curses.color_pair(curses_colors[each["color"]]))
+                    colored = True
+        if not colored:
+            w.addstr(f"{line}\n")
+
+
+def print_long_string(w, string: str, color_options=[]):
     '''
     color_options ex: [{'delimeter': '.', 'color': 'RED'}]
         allows for you to specify a delimeter to search for in 
@@ -40,15 +61,7 @@ def print_long_string(w, string: str, color_options=[{}]):
 
     # chop the string into segments that will fit into the window
     chopped = textwrap.wrap(string, width - 2)
-
-    # add the segments to the window, color them if options are passed
-    for line in chopped:
-        if len(color_options) > 0:
-            for each in color_options:
-                if each["delimeter"] in line:
-                    w.addstr(f"{line}\n", curses.color_pair(color_options[each["color"]]))
-        else:
-            w.addstr(f"{line}\n")
+    delimeter_coloring(w, chopped, color_options)
 
     w.refresh
 
@@ -60,19 +73,10 @@ def print_list(w, list, color_options=[{}]):
 
     height, width = w.getmaxyx()
 
-    # move to the next line
     curs = w.getyx()
     w.move(curs[0] + 1, 0)
 
     for e_string in list:
-        # chop the string into segments that will fit into the window
         chopped = textwrap.wrap(e_string, width - 2)
+        delimeter_coloring(w, chopped, color_options)
 
-        # add the segments to the window, color them if options are passed
-        for line in chopped:
-            if len(color_options) > 0:
-                for each in color_options:
-                    if each["delimeter"] in line:
-                        w.addstr(f"{line}\n", curses.color_pair(color_options[each["color"]]))
-            else:
-                w.addstr(f"{line}\n")
