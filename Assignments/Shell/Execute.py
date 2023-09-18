@@ -52,10 +52,11 @@ def capture_redirects(cmd):
     cmd_obj = []
     for match in redirects:
         symbol, file_name = match.groups()
-        
+        start_index = match.start()
+        end_index = match.end()
         cmd_obj.append(
             {'symbol': symbol, 'file_name': file_name,
-                'start': match.start(), 'end': match.end()}
+                'start': start_index, 'end': end_index}
         )
 
     return cmd_obj
@@ -72,12 +73,12 @@ def parse_cmd(cmd_temp):
     cmds_redirects = capture_redirects(cmd_temp)                                              # get all of the file redirects
     cmd_no_redirects = re.sub(strip_redirect_pattern, '', cmd_temp).strip()                   # deletes all of the redirects from the command 
     
-    # parse off a list of flags then combine them into a flag string, makes it easier to search for flags in commands
-    cmds_flags = re.findall(capture_flag_pattern, cmd_no_redirects)                           # captures each flag for the cmd
+    cmds_flags = re.findall(capture_flag_pattern, cmd_no_redirects)                     # captures each flag for the cmd
     flag_string = ""
-    for flag in cmds_flags:
-        flag_string += flag
-    
+    for cmd in cmds_flags:
+        flag_string += cmd
+
+
     cmd_param_result = re.sub(strip_flag_pattern, '', cmd_no_redirects)                       # deletes all the flags from the cmd
     cmd_obj[cmd_param_result.strip()] = {"flags": flag_string, "redirects": cmds_redirects}    # package the object        
     
@@ -115,8 +116,6 @@ def execute(cmd: str, w):
                 NOTE: can only do one input and one output redirect per command
     ex command: grep keyword input.txt > occurences.txt | cat -n > showcase.txt
 
-    returns: The result of the inputted command
-
     errors:
         CommandDoesNotExist:
         FlagDoesNotExist:
@@ -140,14 +139,13 @@ def execute(cmd: str, w):
                 temp_cmd_obj = parse_cmd(cmd_temp)
                 cmd_obj.update(temp_cmd_obj)
                      
-        print(f"cmd_obj: after parsing --> ({cmd_obj})")
+        #print(f"cmd_obj: after parsing --> ({cmd_obj})")
 
         
         # loop below performs logic on the actual command name and parameters passed if any. 
         # sets piped value if there are any
         # handles input/output redirects found in the command
         prev_cmd_result = None
-        print_output = True
         for count, cmd_name in enumerate(cmd_obj):
             # with all redirects/flags parsed, all that remains is the string holding the name and args
             parsed = cmd_name.split()
@@ -177,7 +175,7 @@ def execute(cmd: str, w):
                 prev_cmd_result = cmd_result
 
             ### OUTPUT REDIRECTS
-            if len(cmd_obj[cmd_name]["redirects"]) > 0:
+            if cmd_obj[cmd_name]["redirects"]:
                 for redirect in cmd_obj[cmd_name]["redirects"]:
                     if redirect["symbol"] == ">":                           # output file redirect passed to command
                         output_data = open(redirect["file_name"], "w")      # try to open the file
@@ -191,20 +189,19 @@ def execute(cmd: str, w):
             for redirect in cmd_obj[cmd_name]["redirects"]:
                 furthest_redirect = redirect["end"] if redirect["end"] > furthest_redirect else furthest_redirect
 
+            print_output = True
             if furthest_redirect - len(cmd) < 2 and furthest_redirect != 0: # redirect happened at end of string
                 print_output = False                                        # do not print it
             
 
-        # determine how to print the returned value
-        # color options are defined in commandsHelper
-        if print_output and type(prev_cmd_result) == str:
-            print_long_string(w, prev_cmd_result)
-        elif print_output and type(prev_cmd_result) == list:
-            print_list(w, prev_cmd_result, 
-                        color_options=commands_helper.color_options[name])
-        else:
-            print_long_string(w, f"No output detected\n")
-        
+            # determine how to print the returned value
+            if print_output and type(prev_cmd_result) == str:
+                print_long_string(w, prev_cmd_result)
+            elif print_output and type(prev_cmd_result) == list:
+                print_list(w, prev_cmd_result)
+            else:
+                print_long_string(w, f"No output detected\n")
+            
         
         return prev_cmd_result
         

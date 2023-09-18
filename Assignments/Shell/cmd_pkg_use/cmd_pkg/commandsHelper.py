@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # from cmd_pkg.__init__ import ls, pwd, cat
 
-from cmd_pkg import grep, cat, exit, ls, pwd 
+from cmd_pkg import grep, cat, exit, ls, pwd, help, mkdir
 
 class CommandsHelper(object):
     """
@@ -24,6 +24,8 @@ class CommandsHelper(object):
         self.invoke["ls"] = ls
         self.invoke["exit"] = exit
         self.invoke["pwd"] = pwd
+        self.invoke['help'] = help
+        self.invoke['mkdir'] = mkdir
 
 
         self.color_options["grep"] = [{}]
@@ -61,8 +63,8 @@ class CommandsHelper(object):
             \n\t{pwd.__doc__}
         """
 
-    # def help(self,cmd):
-    #     return self.commands.invoke[cmd].__doc__
+    def help(self,cmd):
+        return self.invoke[cmd].__doc__
 
 
 

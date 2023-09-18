@@ -124,7 +124,7 @@ def enter_key(cmd: str, w):
     '''
     time.sleep(1)
     prev_cmds.append(cmd)
-    result = execute(cmd, w)
+    result = execute(cmd, w) if cmd != "" else None
     
     set_the_shell(w)
 
@@ -137,5 +137,6 @@ nav_mapper = {
     260: left_arrow,
     261: right_arrow,
     10: enter_key,
-    8: backspace_key
+    8: backspace_key,   # windows
+    263: backspace_key  # ubuntu
 }

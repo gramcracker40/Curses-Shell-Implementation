@@ -40,6 +40,7 @@ def curses_main(w):
     curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
     w.scrollok(True)
+    #curses.scrollok(w, False)  # allows cursor to be reset after resize
 
     w.addstr("---------------------------\n")
     w.addstr("| Shell Implementation    |\n")

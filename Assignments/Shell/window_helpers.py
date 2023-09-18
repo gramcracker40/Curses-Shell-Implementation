@@ -22,14 +22,14 @@ def clear_line(w):
     w.refresh()
 
 
-def delimeter_coloring(w, chopped, color_options):
+def delimeter_coloring(w, chopped, color_options=[{}]):
     '''
     handles the logic behind color_options in 
     print_long_string and print_list 
     adds the strings to the window
     '''
     color_check = bool(color_options[0].get("delimeter")) \
-        and color_options.get("color") is not None
+        and color_options[0].get("color")
 
     for line in chopped:
         colored = False
@@ -43,7 +43,7 @@ def delimeter_coloring(w, chopped, color_options):
             w.addstr(f"{line}\n")
 
 
-def print_long_string(w, string: str, color_options=[]):
+def print_long_string(w, string: str, color_options=[{}]):
     '''
     color_options ex: [{'delimeter': '.', 'color': 'RED'}]
         allows for you to specify a delimeter to search for in 
@@ -57,7 +57,14 @@ def print_long_string(w, string: str, color_options=[]):
 
     # move to the next line
     curs = w.getyx()
-    w.move(curs[0] + 1, 0)
+    try:
+        w.move(curs[0] + 1, 0)
+    except curses.error as err:
+        w.resize(curs[0] + 1, curs[1])
+        w.clear()
+        w.box()
+        w.refresh()
+        #w.move(curs[0] + 1, 0)
 
     # chop the string into segments that will fit into the window
     chopped = textwrap.wrap(string, width - 2)
@@ -74,7 +81,15 @@ def print_list(w, list, color_options=[{}]):
     height, width = w.getmaxyx()
 
     curs = w.getyx()
-    w.move(curs[0] + 1, 0)
+
+    try:
+        w.move(curs[0] + 1, 0)
+    except curses.error as err:
+        w.resize(curs[0] + 1, curs[1])
+        w.clear()
+        w.box()
+        w.refresh()
+        #w.move(curs[0] + 1, 0)
 
     for e_string in list:
         chopped = textwrap.wrap(e_string, width - 2)
