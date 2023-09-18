@@ -28,9 +28,12 @@ def delimeter_coloring(w, chopped, color_options):
     print_long_string and print_list 
     adds the strings to the window
     '''
+    color_check = bool(color_options[0].get("delimeter")) \
+        and color_options.get("color") is not None
+
     for line in chopped:
         colored = False
-        if len(color_options) > 0:
+        if color_check:
             for each in color_options:
                 if each["delimeter"] in line:
                     w.addstr(f"{line}\n", 
