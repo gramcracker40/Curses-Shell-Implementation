@@ -31,14 +31,13 @@ def l_flag(file_paths=[], human_readable=False):
         if human_readable:
             size = convert_readable_size(file_stat.st_size)  # bytes
 
-
         owner = get_username_from_uid(file_stat.st_uid)  # user ID
         group = get_groupname_from_gid(file_stat.st_gid)  # group ID
         permissions = stat.filemode(file_stat.st_mode)
 
         modification_time = datetime.datetime.fromtimestamp(file_stat.st_mtime)  # Modification timestamp
 
-        l_flag_output.append("{:<11} {:<8} {:<8} {:>8} {:<20} {:<30}\n".format(
+        l_flag_output.append("{:<11} {:<8} {:<8} {:<8} {:<20} {:<30}\n".format(
             permissions, owner, group, size, str(modification_time.strftime("%Y-%m-%d %H:%M:%S")), os.path.basename(file_path)
         ))
 

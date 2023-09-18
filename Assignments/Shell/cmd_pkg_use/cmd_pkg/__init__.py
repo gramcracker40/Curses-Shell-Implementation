@@ -9,4 +9,5 @@ from cmd_pkg.Pwd import pwd
 from cmd_pkg.Grep import grep
 from cmd_pkg.Help import help
 from cmd_pkg.Mkdir import mkdir
+from cmd_pkg.Cd import cd
 from cmd_pkg.commandsHelper import CommandsHelper

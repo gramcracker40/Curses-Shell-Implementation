@@ -10,3 +10,8 @@ def pwd(*args, **kwargs):
     '''
     temp = os.getcwd()
     return temp
+
+
+test = pwd()
+
+print(test)

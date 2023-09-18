@@ -4,31 +4,6 @@ from cmd_pkg_use.cmd_pkg import CommandsHelper
 from window_helpers import clear_line, print_long_string, print_list
 
 
-ex_cmds = [
-    "ls -l",
-    "ls -a",
-    "ls",
-    "pwd",
-    "cd",
-    "cd ~",
-    "cd ..",
-    "cp file1 file2",
-    "mv file1 file2",
-    "rm file.txt",
-    "rm -r my_directory",
-    "rm *file*",
-    "rmdir empty_directory",
-    "cat file.txt",
-    "cat file1 file2 fileN",
-    "less large_file.txt",
-    "head -n 10 file.txt",
-    "tail -n 20 file.txt",
-    "grep keyword file.txt",
-    "grep -l error data.txt | cat -n > error_summary.txt",
-    "grep key < data.txt"
-]
-
-
 commands_helper = CommandsHelper()
 
 capture_flag_pattern = r'\s*(-\w+)\b'
@@ -59,8 +34,6 @@ def capture_redirects(cmd):
         )
 
     return cmd_obj
-
-
 
 def parse_cmd(cmd_temp):
     '''
@@ -229,6 +202,30 @@ def execute(cmd: str, w):
 
 # print(commands)
 
+
+ex_cmds = [
+    "ls -l",
+    "ls -a",
+    "ls",
+    "pwd",
+    "cd",
+    "cd ~",
+    "cd ..",
+    "cp file1 file2",
+    "mv file1 file2",
+    "rm file.txt",
+    "rm -r my_directory",
+    "rm *file*",
+    "rmdir empty_directory",
+    "cat file.txt",
+    "cat file1 file2 fileN",
+    "less large_file.txt",
+    "head -n 10 file.txt",
+    "tail -n 20 file.txt",
+    "grep keyword file.txt",
+    "grep -l error data.txt | cat -n > error_summary.txt",
+    "grep key < data.txt"
+]
 
 
 
