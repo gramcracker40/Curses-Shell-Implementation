@@ -26,11 +26,11 @@ class CommandsHelper(object):
         self.invoke["pwd"] = pwd
 
 
-        self.color_options["grep"] = {}
-        self.color_options["cat"] = {}
-        self.color_options["ls"] = {"color": "GREEN", "delimeter": "."}
-        self.color_options["exit"] = {} 
-        self.color_options["pwd"] = {}
+        self.color_options["grep"] = [{}]
+        self.color_options["cat"] = [{}]
+        self.color_options["ls"] = [{"color": "GREEN", "delimeter": "."}]
+        self.color_options["exit"] = [{}]
+        self.color_options["pwd"] = [{}]
 
         
 

@@ -11,7 +11,8 @@ from time import sleep
 ##################################################################################
 ##################################################################################
 
-from loop_helpers import nav_mapper, prompt
+from loop_helpers import nav_mapper, prompt, set_the_shell
+from window_helpers import curses_colors
 
 ##################################################################################
 ##################################################################################
@@ -24,6 +25,11 @@ def main():
 def curses_main(w):
     '''
     Main curses window that will facilitate the shell's infinite loop
+
+    Settings are at the beginning
+
+    Main loop is abstracted dramatically, see loop_helpers.py for more
+    details on the actual navigation. 
     '''
     curses.start_color()
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
@@ -33,19 +39,15 @@ def curses_main(w):
     curses.init_pair(5, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
     curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
-    
-
-
     w.scrollok(True)
 
     w.addstr("---------------------------\n")
     w.addstr("| Shell Implementation    |\n")
     w.addstr("| type 'help' for details |\n")
-    w.addstr("---------------------------\n")
+    w.addstr("---------------------------\n\n")
     w.refresh()
 
-    w.addstr(f"\n{prompt}")
-    w.refresh()
+    set_the_shell(w)
 
     cmd = ""
 
@@ -53,14 +55,14 @@ def curses_main(w):
         char = w.getch()
 
         if char in nav_mapper:
-            action = nav_mapper[char](cmd, w)
-            cmd = action
+            cmd = nav_mapper[char](cmd, w)
 
         else:
             w.addch(char)
             cmd += chr(char)
 
         w.refresh()
+
 
 # starts the curses window
 if __name__ == "__main__":

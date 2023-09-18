@@ -1,4 +1,4 @@
-from window_helper import clear_line
+from window_helpers import clear_line
 
 class CommandDoesNotExist(Exception):
     def __init__(self, message):
