@@ -3,20 +3,19 @@ import time
 
 def main(stdscr):
     stdscr.clear()
-
+    curses.mousemask(1)
 
     # Define the dimensions of your window
     height, width = stdscr.getmaxyx()
     window_height = height - 2  # Leave space for status line at the bottom
 
     # Create a scrolling window
-    window = curses.newpad(100000, width)  # Adjust the number of rows as needed
+    window = curses.newpad(10000, width)  # Adjust the number of rows as needed
     window.scrollok(True)
     pad_pos = 0
 
-    text = f"This is line {pad_pos}. \n"
 
-    window.addstr(pad_pos, 0, text)
+    window.addstr(pad_pos, 0, f"This is line {pad_pos}. \n")
     window.refresh(pad_pos, 0, 1, 0, window_height, width - 1)
     pad_pos += 1
     
@@ -30,20 +29,35 @@ def main(stdscr):
 
         key = window.getch()
         curs = window.getyx()
-        #print(globals())
+
+
+        refresh_y = curs[0] - height if pad_pos - height > 0 else 0
+
+    
+        # _, mx, my, _, _ = curses.getmouse()
+        # y, x = window.getyx()
+        # window.addstr(y, x, window.instr(my, mx, 5))
+        
+
         if key == 43: # right side + button 
             pad_pos += 1
-            window.refresh(pad_pos, 0, 1, 0, window_height, width - 1)
-
+            refresh_y = pad_pos - height if pad_pos - height > 0 else 0
+            window.refresh(refresh_y, 0, 1, 0, height - 1, width - 1)
         elif key == 45: # right side - button 
             pad_pos -= 1
-            window.refresh(pad_pos, 0, 1, 0, window_height, width - 1)
-
+            refresh_y = pad_pos - height if pad_pos - height > 0 else 0
+            window.refresh(refresh_y, 0, 1, 0, height - 1, width - 1)
         else:
             window.addstr(f"{key}\n")
-            window.refresh(curs[0], 0, 1, 0, window_height, width - 1)
+
+            window.refresh(refresh_y, 0, 1, 0, height - 1, width - 1)
             pad_pos += 1
+
+        # Check for mouse events
         
+            
+
+
         #window.refresh(pad_pos, 0, 1, 0, window_height, width - 1)
 
         # Sleep for a moment to control the scrolling speed
