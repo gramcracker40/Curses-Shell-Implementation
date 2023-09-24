@@ -1,55 +1,30 @@
 #!/usr/bin/env python
 from subprocess import call
+from cmd_pkg.cmd_helpers import check_for_help_flag
 
+@check_for_help_flag()
 def cat(*args, **kwargs):
     """   
     NAME
         cat - concatenate files and print on the standard output
     SYNOPSIS
-        cat [OPTION]... [FILE]...
+        cat file1 file2 fileN
+        cat file1 > new_file1.txt
     DESCRIPTION
         Concatenate FILE(s) to standard output.
 
-        -A, --show-all
-                equivalent to -vET
-
-        -b, --number-nonblank
-                number nonempty output lines, overrides -n
-
-        -e     equivalent to -vE
-
-        -E, --show-ends
-                display $ at end of each line
-
-        -n, --number
-                number all output lines
-
-        -s, --squeeze-blank
-                suppress repeated empty output lines
-
-        -t     equivalent to -vT
-
-        -T, --show-tabs
-                display TAB characters as ^I
-
-        --help display this help and exit
-
-        --version
-                output version information and exit
-    EXAMPLES
-        cat f - g
-                Output f's contents, then standard input, then g's contents.
-
-        cat    Copy standard input to standard output.
     """
-    pass
-#     if 'params' in kwargs:
-#         params = kwargs['params']
-#     if 'flags' in kwargs:
-#         flags = kwargs['flags']
-#     command = ["cat"]
+    try:
+        files = kwargs['options']['args']
 
-#     for f in params:
-#         command.append(f)
+        display = [] # print as a list in Execute.py for the formatting to be on point
+        for file in files:
+            temp = open(file, "r").readlines()
+            for line in temp:
+                display.append(line)
 
-#     call(command
+        return display
+
+    except FileNotFoundError as err:
+        return f"File not found -> {err}"
+
