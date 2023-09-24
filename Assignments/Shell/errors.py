@@ -1,9 +1,10 @@
 from window_helpers import clear_line
 
+
 class CommandDoesNotExist(Exception):
     def __init__(self, message):
         super().__init__(message)
-        
+
 
 class FlagDoesNotExist(Exception):
     def __init__(self, message):

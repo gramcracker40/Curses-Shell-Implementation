@@ -38,7 +38,7 @@ def backspace_key(cmd: str, w, **kwargs):
 
 
 ##################################################################
-# left and right arrows allow placing the cursor in user desired positioning
+# left and right arrows allow placing the cursor left and right
 ##################################################################
 
 def right_arrow(cmd: str, w, **kwargs):
@@ -102,7 +102,7 @@ def down_arrow(cmd: str, w, **kwargs):
     return new_cmd
 
 ##################################################################
-# window scroll buttons side '+' and '-'
+# window scroll buttons  'page up' and 'page down'
 ##################################################################
 
 scroller = 0
@@ -170,28 +170,33 @@ def enter_key(cmd: str, w, **kwargs):
 def tab_button(cmd: str, w, **kwargs):
     '''
     auto complete for file name being typed into terminal
+    tab to autocomplete a directory in cd or when passing to 
+    any command a file in the cwd. 
     '''
+    try:
+        directory = os.listdir(os.getcwd())
 
-    directory = os.listdir(os.getcwd())
+        # find the being typed file at the end of the command, reconstruct after
+        temp = cmd.split()
+        #print(temp[-1])
+        file_name = temp[-1]
 
-    # find the being typed file at the end of the command, reconstruct after
-    temp = cmd.split()
-    #print(temp[-1])
-    file_name = temp[-1]
-
-    for path in directory: 
-        if file_name in path:
-            return_cmd = cmd[:-len(file_name)] + path  # replace the currently typed file 
-                                                       # with the completed file if any
-    
-    clear_line(w)
-    w.addstr(prompt, curses.color_pair(curses_colors["YELLOW"]))
-    w.addstr(return_cmd)
-
-
-    return return_cmd
+        return_cmd = cmd
+        for path in directory: 
+            if file_name in path:
+                return_cmd = cmd[:-len(file_name)] + path  # replace the currently typed file 
+                                                        # with the completed file if any
+        
+        clear_line(w)
+        w.addstr(prompt, curses.color_pair(curses_colors["YELLOW"]))
+        w.addstr(return_cmd)
 
 
+        return return_cmd
+    except IndexError:  # nothing typed in for cmd
+        return cmd
+
+# maps all of the curses values for each of the navigational components
 nav_mapper = {
     curses.KEY_UP: up_arrow,        #259
     curses.KEY_DOWN: down_arrow,    #258

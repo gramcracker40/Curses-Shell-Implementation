@@ -10,11 +10,18 @@ def rmdir(*args, **kwargs):
     '''
 
     try:
-        directory = kwargs['options']['args'][0]
-        os.rmdir(directory)
-        return f"Directory '{directory}' removed successfully."
-    except FileNotFoundError:
-        return f"Error: Directory '{directory}' not found."
+        args = kwargs['options']['args']
+        return_list = []
+        
+        for directory in args:
+            try:
+                os.rmdir(directory)
+                return_list.append(f"Directory '{directory}' removed successfully.")
+            except FileNotFoundError as err:
+                return_list.append(f"Directory '{directory}' not found")
+        
+        return return_list
+    
     except OSError as e:
         return f"Error: {e}"
     except IndexError as e:

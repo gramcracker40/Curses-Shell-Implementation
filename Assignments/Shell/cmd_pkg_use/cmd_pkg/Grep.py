@@ -12,26 +12,31 @@ def grep(*args, **kwargs):
     
     args = kwargs['options']['args']
     flags = kwargs['options']['flags']
-    keyword = args[0]
-
+    
     try:
-        total = 0
+        keyword = args[0]
         files = []
-        if len(args) >= 1:
+        lines = []
+        if len(args) >= 2:
             for arg in args[1:]:
-                temp = open(arg, "r").read()
-                count = temp.count(keyword)
+                temp = open(arg, "r").readlines()
+                count = 0
+                for each in temp:       # grab the line and count of occurences
+                    if keyword in each:
+                        lines.append(each)
+                        count += each.count(keyword)
 
                 if count > 0:
                     files.append(arg)
-                    total += count
-                       
-            return f"{total}" if "-l" not in flags else files
+
+            return lines if "l" not in flags else files
         else:
             return f"Please pass valid arguments to grep"
         
     except FileNotFoundError as err:
-        return f"One of the files specified does not exist"
+        return f"grep: one of the files specified does not exist"
+    except IndexError as err:
+        return f"grep: please pass arguments"
 
 
 
