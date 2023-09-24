@@ -68,25 +68,23 @@ def parse_cmd(cmd_temp):
     '''
     cmd_obj = {}
     
-    cmds_redirects = capture_redirects(cmd_temp)                                              # get all of the file redirects
-    cmd_no_redirects = re.sub(strip_redirect_pattern, '', cmd_temp).strip()                   # deletes all of the redirects from the command 
+    # REDIRECTS
+    cmds_redirects = capture_redirects(cmd_temp) # get all of the file redirects
+    cmd_no_redirects = re.sub(strip_redirect_pattern, '', cmd_temp).strip() # deletes all of the redirects from the command 
     
-    cmds_flags = re.findall(capture_flag_pattern, cmd_no_redirects)                     # captures each flag for the cmd
-    flag_string = ""
-    for cmd in cmds_flags:
+    # FLAGS
+    cmds_flags = re.findall(capture_flag_pattern, cmd_no_redirects) # captures each flag for the cmd
+    flag_string = ""        
+    for cmd in cmds_flags:  # build the flag string, easier to check in functions
         flag_string += cmd
-
-
-    cmd_param_result = re.sub(strip_flag_pattern, '', cmd_no_redirects)                       # deletes all the flags from the cmd
-    cmd_obj[cmd_param_result.strip()] = {"flags": flag_string, "redirects": cmds_redirects}    # package the object        
+    cmd_param_result = re.sub(strip_flag_pattern, '', cmd_no_redirects) # deletes all the flags from the cmd
+    
+    # PACKAGING
+    cmd_obj[cmd_param_result.strip()] = {"flags": flag_string, "redirects": cmds_redirects} # package the object        
     
     return cmd_obj
 
 ##################################################################################
-##################################################################################
-###
-### Execute the command
-###
 ##################################################################################
 
 
@@ -132,8 +130,7 @@ def execute(cmd: str, w):
 
         # parse the command/s, build cmd_obj
         if type(commands) == str:
-            temp_cmd_obj = parse_cmd(commands)
-            cmd_obj = temp_cmd_obj
+            cmd_obj = parse_cmd(commands)
         
         elif type(commands) == list:
             for cmd_temp in commands:
@@ -162,7 +159,7 @@ def execute(cmd: str, w):
                 for redirect in cmd_obj[cmd_name]["redirects"]:
                     if redirect["symbol"] == "<":                           # input file redirect passed to command
                         input_data = open(redirect["file_name"], "r")       # try to open the file
-                        cmd_obj[cmd_name]["input_data"] = input_data.read() # pass the file as a string to cmd_obj
+                        cmd_obj[cmd_name]["input_data"] = input_data.readlines() # pass the file as a string to cmd_obj
                         break                                               # ensures only one input redirect can be passed per command
             #######################################################################################################################
 

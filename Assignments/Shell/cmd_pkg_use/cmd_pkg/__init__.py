@@ -15,4 +15,7 @@ from cmd_pkg.Cp import cp
 from cmd_pkg.Rm import rm
 from cmd_pkg.Rmdir import rmdir
 from cmd_pkg.Head import head
+from cmd_pkg.Tail import tail
+from cmd_pkg.Touch import touch
+from cmd_pkg.Wc import wc
 from cmd_pkg.commandsHelper import CommandsHelper

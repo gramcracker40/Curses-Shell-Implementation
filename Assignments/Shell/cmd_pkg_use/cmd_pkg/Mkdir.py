@@ -3,20 +3,24 @@ from cmd_pkg.cmd_helpers import check_for_help_flag
 
 @check_for_help_flag()
 def mkdir(*args, **kwargs):
-    '''
-    makes a new directory in the current directory
+    '''makes a new directory in the current directory
+    \n   can also specify multiple directories to create. 
+    \n mkdir file1
+    \n mkdir folder1 folder2 folderN
     '''
     try:
-        dir_name = kwargs['options']['args'][0] # grab first argument passed
+        dir_name = kwargs['options']['args']
 
-        if not os.path.exists(dir_name):
-            os.makedirs(dir_name)
-            temp = f"Directory '{dir_name}' created successfully.\n"
-        else:
-            temp = f"Directory '{dir_name}' already exists.\n"
+        temp = []
+        for dir in dir_name:
+            if not os.path.exists(dir):
+                os.makedirs(dir)
+                temp.append(f"Directory '{dir}' created successfully.\n")
+            else:
+                temp.append(f"Directory '{dir}' already exists.\n")
 
     except TypeError:
-        temp = f"Please pass arguments to mkdir\n"
+        temp.append(f"Please pass arguments to mkdir\n")
 
     return temp
 

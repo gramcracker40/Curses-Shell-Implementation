@@ -2,7 +2,8 @@
 # from cmd_pkg.__init__ import ls, pwd, cat
 
 from cmd_pkg import grep, cat, exit, ls, pwd, \
-                mkdir, cd, sort, dir, cp, rm, rmdir, head
+                mkdir, cd, sort, dir, cp, rm, rmdir, \
+                head, tail, touch, wc
 
 class CommandsHelper(object):
     """
@@ -32,6 +33,9 @@ class CommandsHelper(object):
         self.invoke['rm'] = rm
         self.invoke['rmdir'] = rmdir
         self.invoke['head'] = head
+        self.invoke['tail'] = tail
+        self.invoke['touch'] = touch
+        self.invoke['wc'] = wc
 
         self.color_options["grep"] = [{}]
         self.color_options["cat"] = [{}]

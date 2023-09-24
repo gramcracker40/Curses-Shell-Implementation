@@ -62,11 +62,12 @@ def ls(*args, **kwargs):
     if "a" not in flags:
         returner = [x for x in returner if x[0] != "."]
 
-    if "l" in flags:
-        returner = l_flag(temp)
-    
     if "l" and "h" in flags:
-        returner = l_flag(temp, human_readable=True)
+        returner = l_flag(returner, human_readable=True)
+    elif "l" in flags:
+        returner = l_flag(returner)
+    
+    
 
     
 
