@@ -72,15 +72,15 @@ def curses_main(w):
 
     while True:
         key = w.getch()
-
+        
         if key in nav_mapper:
             cmd = nav_mapper[key](cmd, window, curses_w=w)
         else:
             window.addch(chr(key))
             cmd += chr(key)
 
-        # grab the cursor again, need fresh value to refresh on (window_helpers), 
-        # only refresh if they are not scrolling
+        # only refresh if they are not scrolling. This way, if they start typing they 
+        #      will immediately be dragged to the bottom most available display. 
         y, x = window.getyx()
         refresh_y = (y + 2) - w_height if y - w_height > 0 else 0
 

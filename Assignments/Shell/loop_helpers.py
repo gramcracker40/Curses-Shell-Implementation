@@ -11,7 +11,7 @@ import time
 import curses
 from socket import gethostname
 from Execute import execute
-from window_helpers import clear_line, set_the_shell, prompt, pad_pos
+from window_helpers import clear_line, set_the_shell, prompt, pad_pos, curses_colors
 
 prev_cmds = []              # in memory list of all previous commands
 arrow_counter = 0           # up and down arrow index position
@@ -30,7 +30,8 @@ def backspace_key(cmd: str, w, **kwargs):
 
     if temp != cmd:
         clear_line(w)
-        w.addstr(prompt + temp)
+        w.addstr(prompt, curses.color_pair(curses_colors["YELLOW"]))
+        w.addstr(temp)
         w.move(curs[0], curs[1] - 1)
 
     return temp
@@ -78,7 +79,9 @@ def up_arrow(cmd: str, w, **kwargs):
     clear_line(w)
 
     new_cmd = prev_cmds[arrow_counter]
-    w.addstr(prompt + new_cmd)
+
+    w.addstr(prompt, curses.color_pair(curses_colors["YELLOW"]))
+    w.addstr(new_cmd)
 
     return new_cmd
 
@@ -93,7 +96,8 @@ def down_arrow(cmd: str, w, **kwargs):
     
     new_cmd = prev_cmds[arrow_counter]
 
-    w.addstr(prompt + new_cmd)
+    w.addstr(prompt, curses.color_pair(curses_colors["YELLOW"]))
+    w.addstr(new_cmd)
 
     return new_cmd
 
@@ -112,6 +116,7 @@ def scroll_up(cmd:str, w, **kwargs):
     w_height, w_width = kwargs["curses_w"].getmaxyx()
 
     global scroller
+
     scroller += 1
 
     refresh_y = y - scroller if y - scroller > 0 else 0
@@ -150,12 +155,43 @@ def enter_key(cmd: str, w, **kwargs):
     executes the command
     '''
     #time.sleep(1)
-    prev_cmds.append(cmd)
+    global prev_cmds
+    prev_cmds.insert(0, cmd)
     result = execute(cmd, w) if cmd != "" else None
     
+    temp = [x for x in prev_cmds if x != ""]
+    prev_cmds = temp
+
     set_the_shell(w)
 
     return "" # reset the command in shell
+
+
+def tab_button(cmd: str, w, **kwargs):
+    '''
+    TODO: implement auto complete
+    '''
+
+    directory = os.listdir(os.getcwd())
+
+    # find the being typed file at the end of the command, reconstruct after
+    temp = cmd.split()
+    #print(temp[-1])
+    file_name = temp[-1]
+    return_cmd = cmd
+
+    for path in directory:
+        # print(f"path: ({path})")
+        if file_name in path:
+            return_cmd = cmd[:-len(file_name)] + path
+            # print(f"return_cmd: {return_cmd}")
+    
+    clear_line(w)
+    w.addstr(prompt, curses.color_pair(curses_colors["YELLOW"]))
+    w.addstr(return_cmd)
+
+
+    return return_cmd
 
 
 nav_mapper = {
@@ -168,5 +204,6 @@ nav_mapper = {
     263: backspace_key,             # ubuntu
     127: backspace_key,             # ubuntu server
     curses.KEY_PPAGE: scroll_up,
-    curses.KEY_NPAGE: scroll_down
+    curses.KEY_NPAGE: scroll_down,
+    9: tab_button
 }

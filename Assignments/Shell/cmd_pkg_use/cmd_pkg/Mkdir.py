@@ -1,5 +1,7 @@
 import os
+from cmd_pkg.cmd_helpers import check_for_help_flag
 
+@check_for_help_flag()
 def mkdir(*args, **kwargs):
     '''
     makes a new directory in the current directory

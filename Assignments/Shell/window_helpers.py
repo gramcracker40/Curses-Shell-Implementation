@@ -33,7 +33,7 @@ def set_the_shell(w):
 
     w.addstr(f"\n{username}@{hostname} ~ ", curses.color_pair(curses_colors["RED"]))
     w.addstr(f"{os.getcwd()}\n", curses.color_pair(curses_colors["CYAN"]))
-    w.addstr(prompt)
+    w.addstr(prompt, curses.color_pair(curses_colors["YELLOW"]))
 
     pad_pos += 3
 
@@ -92,3 +92,19 @@ def print_list(w, list, color_options=[{}]):
         chopped = textwrap.wrap(e_string, width - 2)
         delimeter_coloring(w, chopped, color_options)
 
+
+def print_obj(w, obj):
+    '''
+    prints an object formatted as such
+    {"string to print here": curses.color_pair(curses_colors["YELLOW"])}
+    
+    will handle chopping string into sizeable pieces before hand, the key
+      can be as long of a string as you need
+
+    coloring takes place as the value. pass a curses.color_pair() as the value
+    
+    each key will be printed and then seperated by a newline
+    '''
+
+    
+    

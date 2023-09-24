@@ -17,4 +17,4 @@ class InvalidArgument(Exception):
 
 def display_error(w, err):
     clear_line(w)
-    w.addstr(f"An error occurred\n{err}\n")
+    w.addstr(f"\nAn error occurred\n{err}\n")

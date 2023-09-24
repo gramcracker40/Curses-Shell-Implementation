@@ -3,6 +3,7 @@ import os
 import stat
 import datetime
 from cmd_pkg.cmd_helpers import get_username_from_uid, get_groupname_from_gid
+from cmd_pkg.cmd_helpers import check_for_help_flag
 
 
 def convert_readable_size(size_bytes):
@@ -37,7 +38,7 @@ def l_flag(file_paths=[], human_readable=False):
 
         modification_time = datetime.datetime.fromtimestamp(file_stat.st_mtime)  # Modification timestamp
 
-        l_flag_output.append("{:<11} {:<8} {:<8} {:<8} {:<20} {:<30}\n".format(
+        l_flag_output.append("{:<11} {:<7} {:<7} {:>8} {:<20} {:<30}".format(
             permissions, owner, group, size, str(modification_time.strftime("%Y-%m-%d %H:%M:%S")), os.path.basename(file_path)
         ))
 
@@ -47,16 +48,26 @@ def l_flag(file_paths=[], human_readable=False):
 def ls(*args, **kwargs):
     '''
     return the entire current working directory
+    \n\n flags:
+    \n -l  --> long listing
+    \n -lh --> long listed human readable
+    \n -a  --> include hidden files
+ 
     '''
+    flags = kwargs["options"]["flags"]
+
     temp = os.listdir(os.getcwd())
     returner = temp
-    
-    flags = kwargs["options"]["flags"]
+
+    if "a" not in flags:
+        returner = [x for x in returner if x[0] != "."]
 
     if "l" in flags:
         returner = l_flag(temp)
     
     if "l" and "h" in flags:
         returner = l_flag(temp, human_readable=True)
+
+    
 
     return returner
