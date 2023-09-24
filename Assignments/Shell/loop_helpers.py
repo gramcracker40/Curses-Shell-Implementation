@@ -169,7 +169,7 @@ def enter_key(cmd: str, w, **kwargs):
 
 def tab_button(cmd: str, w, **kwargs):
     '''
-    TODO: implement auto complete
+    auto complete for file name being typed into terminal
     '''
 
     directory = os.listdir(os.getcwd())
@@ -178,13 +178,11 @@ def tab_button(cmd: str, w, **kwargs):
     temp = cmd.split()
     #print(temp[-1])
     file_name = temp[-1]
-    return_cmd = cmd
 
-    for path in directory:
-        # print(f"path: ({path})")
+    for path in directory: 
         if file_name in path:
-            return_cmd = cmd[:-len(file_name)] + path
-            # print(f"return_cmd: {return_cmd}")
+            return_cmd = cmd[:-len(file_name)] + path  # replace the currently typed file 
+                                                       # with the completed file if any
     
     clear_line(w)
     w.addstr(prompt, curses.color_pair(curses_colors["YELLOW"]))
