@@ -18,4 +18,7 @@ from cmd_pkg.Head import head
 from cmd_pkg.Tail import tail
 from cmd_pkg.Touch import touch
 from cmd_pkg.Wc import wc
+from cmd_pkg.Mv import mv
+from cmd_pkg.History import history
+from cmd_pkg.Chmod import chmod
 from cmd_pkg.commandsHelper import CommandsHelper

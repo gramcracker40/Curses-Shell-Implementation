@@ -67,8 +67,4 @@ def ls(*args, **kwargs):
     elif "l" in flags:
         returner = l_flag(returner)
     
-    
-
-    
-
     return returner
