@@ -10,18 +10,19 @@ def grep(*args, **kwargs):
     \n  int: number of occurences of keyword in given files
     \n  str: file names where keyword exists, only on -l flag'''
     
-    args = kwargs['options']['args']
-    flags = kwargs['options']['flags']
-    
     try:
+        args = kwargs['options']['args']
+        flags = kwargs['options']['flags']
+        input_data = kwargs['options']['input_data']
+        
         keyword = args[0]
         files = []
         lines = []
-        if len(args) >= 2:
+        if len(args) >= 2:                  # regular grep keyword file usage
             for arg in args[1:]:
                 temp = open(arg, "r").readlines()
                 count = 0
-                for each in temp:       # grab the line and count of occurences
+                for each in temp:           # grab the line and count of occurences
                     if keyword in each:
                         lines.append(each)
                         count += each.count(keyword)
@@ -30,6 +31,19 @@ def grep(*args, **kwargs):
                     files.append(arg)
 
             return lines if "l" not in flags else files
+        elif len(args) == 1 and input_data:  # check for piped value or input redirect, parse through str or list input
+            if type(input_data) == list:
+                for each in input_data:
+                    if keyword in each:
+                        lines.append(each)
+
+            elif type(input_data) == str:
+                count += input_data.count(keyword)
+                for each in input_data.split('\n'):
+                    if keyword in each:
+                        lines.append(each)
+            return lines if "l" not in flags else files
+ 
         else:
             return f"Please pass valid arguments to grep"
         

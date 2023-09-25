@@ -7,17 +7,24 @@ def sort(*args, **kwargs):
     given a string with rows seperated by new lines. sort the lines
     and return the output
     '''
-    input_data = kwargs["options"]["input_data"]
-    lines = input_data.split('\n') if type(input_data) == str else None
-
-    if type(input_data) == list:
-        temp = ""
-        for each in input_data:
-            temp += f"{each}\n"
+    try:
+        input_data = kwargs["options"]["input_data"]
         
-        lines = temp.split('\n')
+        if not input_data:
+            input_data = open(kwargs["options"]["args"][0], "r").readlines()
+        
+        if type(input_data) == list:
+            temp = ""
+            for each in input_data:
+                temp += f"{each}\n"
+            
+            lines = temp.split('\n')
+        elif type(input_data) == str:
+            lines = input_data.split('\n')
 
-    lines.sort()
+        lines.sort()
 
-    return lines
-
+        return lines
+    
+    except FileNotFoundError as err:
+        return f"Error: {err}"

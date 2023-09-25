@@ -162,6 +162,9 @@ def enter_key(cmd: str, w, **kwargs):
     temp = [x for x in prev_cmds if x != ""]
     prev_cmds = temp
 
+    with open(f"/home/bench/Shell/Assignments/Shell/cmd_pkg_use/cmd_pkg/command_history.txt", "w") as cmd_hist:
+        cmd_hist.write(str(prev_cmds))
+
     set_the_shell(w)
 
     return "" # reset the command in shell

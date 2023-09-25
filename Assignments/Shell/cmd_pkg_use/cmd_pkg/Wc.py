@@ -1,7 +1,10 @@
+from cmd_pkg.cmd_helpers import check_for_help_flag
 
+@check_for_help_flag()
 def wc(*args, **kwargs):
     '''
     \n given input, find the number of lines, words or characters.
+    \n      must specify a flag to receive output
     \n - \n -
     \n wc file.txt -l
     \n - \n -
