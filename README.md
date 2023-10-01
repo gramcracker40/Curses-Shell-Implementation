@@ -17,25 +17,45 @@ The parsing method applied to the command is very unique. All those details are 
 
 ### Commands implemented with basic examples
   grep    = grep keyword file.txt               |
+  
   help    = help                                | 
+  
   cat     = cat file1 file2 > file3             |
+  
   ls      = ls -lah                             |
-  exit    = exit                                |            
+  
+  exit    = exit                                |      
+  
   pwd     = pwd                                 |
+  
   mkdir   = mkdir dir1 dir2 dirN                | 
+  
   cd      = cd /valid/path/to/change            |
+  
   sort    = sort file.txt > sorted_file.txt     |
+  
   dir     = dir                                 |
+  
   cp      = cp directory1 directory2            |
+  
   rm      = rm dir1 dir2 dirN                   | 
+  
   rmdir   = rmdir dir1 dir2 dirN                |
+  
   head    = head file.txt -n 25                 |
-  tail    = tail file.txt -n 25                 |              
+  
+  tail    = tail file.txt -n 25                 |       
+  
   touch   = touch file1 file2 fileN             |
+  
   wc      = wc file1 -l                         |
+  
   mv      = mv directory1 directory2            |
+  
   history = history                             |
+  
   chmod   = chmod 777 file.txt                  |
+  
   !       = ! 2                                 |
 
 
