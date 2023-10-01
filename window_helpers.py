@@ -58,12 +58,13 @@ def print_long_string(w, string: str, color_options=[{}]):
     # move to the next line
     curs = w.getyx()
     try:
-        w.move(curs[0] + 1, 0)
+        w.scroll(1)
     except curses.error as err:
-        w.resize(curs[0] + 1, curs[1])
-        w.clear()
-        w.box()
-        w.refresh()
+        print(f"Error occured in scroll {err}")
+        # w.resize(curs[0] + 1, curs[1])
+        # w.clear()
+        # w.box()
+        # w.refresh()
         #w.move(curs[0] + 1, 0)
 
     # chop the string into segments that will fit into the window
@@ -83,12 +84,13 @@ def print_list(w, list, color_options=[{}]):
     curs = w.getyx()
 
     try:
-        w.move(curs[0] + 1, 0)
+        w.scroll(1)
     except curses.error as err:
-        w.resize(curs[0] + 1, curs[1])
-        w.clear()
-        w.box()
-        w.refresh()
+        print(f"An error occurred --> {err}")
+        # w.resize(curs[0] + 1, curs[1])
+        # w.clear()
+        # w.box()
+        # w.refresh()
         #w.move(curs[0] + 1, 0)
 
     for e_string in list:
