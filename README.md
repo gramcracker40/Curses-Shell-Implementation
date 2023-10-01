@@ -4,7 +4,7 @@
 Once you clone the repo, simply type this command and press any key to enter the shell. 
 
   ### python3 shell_loop.py
-
+![ShellExample](https://github.com/gramcracker40/Curses-Shell-Implementation/blob/main/ShellExample.png)
 
   First thing to do is type 'help'. This will give you a longwinded explanation of the inner details behind the shell. How I handle pipes, redirects, processing flags, etc.
 The parsing method applied to the command is very unique. All those details are found in Execute.py. 
