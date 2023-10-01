@@ -1,1 +1,0 @@
-['ls -lah', 'chmod 777 out123.txt', 'cd ~', 'ls']
