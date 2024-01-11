@@ -3,7 +3,7 @@
 # Shell Implementation in Python using Curses library. 
 
 ## Overview
-This project provides a custom shell implementation using the curses library in Python. It is designed to run on Linux systems and has been tested on Ubuntu. This shell offers a range of commands and showcases the capabilities of curses windows and pads, going beyond basic single-windowed examples found in GeeksforGeeks tutorials on this stuff. The docs on this module don't offer many examples on usage, and everytime I looked up anything for the curses module in python I was met with pure disappointment for the project already made. The shell is pretty cool and can be taken to new heights pretty quickly because it is super easy to add new commands, simply go to the cmd_pkg directory.
+This project provides a custom shell implementation using the curses library in Python. It is designed to run on Linux systems and has been tested on Ubuntu. This shell offers a range of commands and showcases the capabilities of curses windows and pads, going beyond basic single-windowed examples found in GeeksforGeeks tutorials on this stuff. The docs on this module don't offer many examples on usage, and everytime I looked up anything for the curses module in python I was met with pure disappointment. The shell is pretty cool and can be taken to new heights pretty quickly because it is super easy to add new commands, simply go to the cmd_pkg directory.
 
 ## Installation and Usage
 1. Clone the repository to your local machine.
