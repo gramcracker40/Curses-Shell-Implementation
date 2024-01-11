@@ -74,7 +74,7 @@ Certainly! Below is a documentation outline describing the purpose of each file 
 - **Purpose:** The main script that runs the shell loop, accepting user input and responding accordingly. This file is central to the shell's functionality.
 
 ### window_helpers.py
-- **Purpose:** Contains helper functions or classes related to the windowing aspects of the project, especially if using libraries like curses for creating text-based user interfaces.
+- **Purpose:** Contains helper functions or classes related to the windowing aspects of the project, implements a lot of helper functions surrounding the windowed object. 
 
 ---
 
