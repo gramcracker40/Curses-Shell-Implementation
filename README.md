@@ -1,61 +1,39 @@
-# Shell Implementation (Curses/Python) 
+---
 
-  Runs on Linux only. Tested with Ubuntu.
-Once you clone the repo, simply type this command and press any key to enter the shell. 
+# Shell Implementation in Curses/Python
 
-  ### python3 shell_loop.py
-![ShellExample](https://github.com/gramcracker40/Curses-Shell-Implementation/blob/main/ShellExample.png)
+## Overview
+This project provides a custom shell implementation using the curses library in Python. It is designed to run on Linux systems and has been tested on Ubuntu. This shell offers a range of commands and showcases the capabilities of curses windows and pads, going beyond basic single-windowed examples found in GeeksforGeeks tutorials on this stuff. The docs on this module don't offer many examples on usage, and everytime I looked up anything for the curses module in python I was met with pure disappointment for the project already made. The shell is pretty cool and can be taken to new heights pretty quickly because it is super easy to add new commands, simply go to the cmd_pkg directory. 
 
-  First thing to do is type 'help'. This will give you a longwinded explanation of the inner details behind the shell. How I handle pipes, redirects, processing flags, etc.
-The parsing method applied to the command is very unique. All those details are found in Execute.py. 
+## Installation and Usage
+1. Clone the repository to your local machine.
+2. Run the shell using the following command:
+   ```
+   python3 shell_loop.py
+   ```
 
-  Wanted to publish this code for the curses library because I found there to be little detail surrounding this style of project within the docs and across the internet. Most were single windowed basic projects that didn't show the nested potential of curses windows and pads. 
+## Features
+- **Custom Command Parsing:** The parsing method applied to commands is unique. Detailed explanations of the parsing logic are available in `Execute.py`.
+- **Curses Library Usage:** Demonstrates advanced uses of curses windows and pads. Relevant code is found in `loop_helpers.py`, `window_helpers.py`, and `shell_loop.py`.
+- **Command Execution Logic:** Implemented in `cmd_pkg_use` and `Execute.py`.
 
-  All of the code that uses the `curses` library is found in `loop_helpers.py`, `window_helpers.py`, and `shell_loop.py`. 
+## Available Commands
+- **Basic Navigation and File Management:** `ls`, `cd`, `mkdir`, `rmdir`, `touch`, `cp`, `mv`, `rm`
+- **File Content Manipulation:** `cat`, `grep`, `sort`, `head`, `tail`, `wc`
+- **System and Permissions:** `pwd`, `chmod`, `history`, `exit`
+- **Examples:** Each command supports various flags and arguments. For example:
+  - `grep keyword file.txt`
+  - `cat file1 file2 > file3`
+  - `ls -lah`
+  - `chmod 777 file.txt`
 
-  All of the code that implements the command execution and logic is found in `cmd_pkg_use` and `Execute.py`.
+## Getting Started
+- To understand the shell's functionalities and command handling, type `help` after starting the shell. This will provide detailed information on command processing, pipe handling, redirections, and flag interpretations.
 
-### Commands implemented with basic examples
-  grep    = grep keyword file.txt               |
-  
-  help    = help                                | 
-  
-  cat     = cat file1 file2 > file3             |
-  
-  ls      = ls -lah                             |
-  
-  exit    = exit                                |      
-  
-  pwd     = pwd                                 |
-  
-  mkdir   = mkdir dir1 dir2 dirN                | 
-  
-  cd      = cd /valid/path/to/change            |
-  
-  sort    = sort file.txt > sorted_file.txt     |
-  
-  dir     = dir                                 |
-  
-  cp      = cp directory1 directory2            |
-  
-  rm      = rm dir1 dir2 dirN                   | 
-  
-  rmdir   = rmdir dir1 dir2 dirN                |
-  
-  head    = head file.txt -n 25                 |
-  
-  tail    = tail file.txt -n 25                 |       
-  
-  touch   = touch file1 file2 fileN             |
-  
-  wc      = wc file1 -l                         |
-  
-  mv      = mv directory1 directory2            |
-  
-  history = history                             |
-  
-  chmod   = chmod 777 file.txt                  |
-  
-  !       = ! 2                                 |
+## Contributing
+- Contributions to enhance the shell, add new features, or improve documentation are welcome. Please follow standard GitHub pull request procedures.
 
+## Acknowledgments
+- This project aims to contribute to the community by providing a detailed example of a shell implementation using curses in Python, addressing the lack of comprehensive resources on this topic across the internet and official documentation.
 
+---
