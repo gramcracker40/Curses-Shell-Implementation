@@ -11,6 +11,8 @@ This project provides a custom shell implementation using the curses library in 
    ```
    python3 shell_loop.py
    ```
+![Shell Example](ShellExample.png)
+   
 
 ## Features
 - **Custom Command Parsing:** The parsing method applied to commands is unique. Detailed explanations of the parsing logic are available in `Execute.py`.
