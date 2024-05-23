@@ -37,8 +37,6 @@ This project provides a custom shell implementation using the curses library in 
 
 
 
-Certainly! Below is a documentation outline describing the purpose of each file and directory in your project structure:
-
 ---
 
 # Project Structure Documentation
